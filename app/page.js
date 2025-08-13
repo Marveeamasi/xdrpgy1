@@ -5,8 +5,8 @@ import { ref, get } from 'firebase/database';
 import { changeFavicon } from './changeFavicon';
 
 export default function Page() {
-    const [isNiceVisible, setIsNiceVisible] = useState(true);
-    const [animateIn, setAnimateIn] = useState(true);
+    const [isNiceVisible, setIsNiceVisible] = useState(false);
+    const [animateIn, setAnimateIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
