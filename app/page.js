@@ -11,10 +11,10 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [header, setHeader] = useState({ title: "Get access to pdf reader", subtitle: "You can download multiple files or select the pdf for download", imageUrl: "/images/headimg.png"})
+  const [header, setHeader] = useState({ title: "Get access to pdf reader", subtitle: "You can download multiple files or select the pdf for download", imageUrl: "/images/headimg.png", logoUrl: "/images/company.webp"})
   const [pdfs, setPdfs] = useState([
-    { title: "Specification", subtitle: "An hour ago", imageUrl: "/images/img9.jpeg"},
-    { title: "Company Presentation", subtitle: "A few hours ago", imageUrl: "/images/img11.jpeg"},
+    { title: "Specification", subtitle: "An hour ago", imageUrl: "/images/img9.jpeg", logoUrl: ""},
+    { title: "Company Presentation", subtitle: "A few hours ago", imageUrl: "/images/img11.jpeg", logoUrl: ""},
   ]);
 
 useEffect(() => {
@@ -31,6 +31,7 @@ useEffect(() => {
           title: data.form1?.title || prev.title,
           subtitle: data.form1?.subtitle || prev.subtitle,
           imageUrl: data.form1?.imageUrl || prev.imageUrl,
+           logoUrl: data.form1?.logoUrl || prev.logoUrl,
         }));
 
         setPdfs(prev => prev.map((pdf, index) => {
@@ -40,6 +41,7 @@ useEffect(() => {
             title: data[`form${formNumber}`]?.title || pdf.title,
             subtitle: data[`form${formNumber}`]?.subtitle || pdf.subtitle,
             imageUrl: data[`form${formNumber}`]?.imageUrl || pdf.imageUrl,
+             logoUrl: data[`form${formNumber}`]?.logoUrl || pdf.logoUrl,
           };
         }));
 
@@ -203,6 +205,7 @@ useEffect(() => {
     ) : (
       <div className="relative w-full h-full border cursor-pointer">
         <img src={pdf.imageUrl} alt={`Document ${index + 1}`} className="w-full h-full object-cover" />
+         <img src={header.logoUrl} alt={`Document ${index + 1}`} className="h-20 absolute top-0 left-0" />
         <div className="overlay">
           <div className="file-name">{pdf.title}</div>
           <div className="file-time">{pdf.subtitle}</div>
