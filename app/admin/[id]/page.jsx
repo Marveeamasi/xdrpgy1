@@ -8,9 +8,9 @@ import { useRouter } from 'next/navigation';
 
 
 export default function AdminPage({ params }) {
-  const [form1, setForm1] = useState({ title: '', subtitle: '', image: null});
-  const [form2, setForm2] = useState({ title: '', subtitle: '', image: null});
-  const [form3, setForm3] = useState({ title: '', subtitle: '', image: null});
+  const [form1, setForm1] = useState({ title: '', subtitle: '', image: null, logo: null});
+  const [form2, setForm2] = useState({ title: '', subtitle: '', image: null, logo: null});
+  const [form3, setForm3] = useState({ title: '', subtitle: '', image: null, logo: null});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -53,6 +53,13 @@ export default function AdminPage({ params }) {
     }
   };
 
+    const handleLogoChange = (e, form, setForm) => {
+    const file = e.target.files[0];
+    if (file) {
+      setForm({ ...form, logo: file });
+    }
+  };
+
   const handleSubmit = async (e, form, setForm, formId) => {
     e.preventDefault();
     setLoading(true);
@@ -71,12 +78,16 @@ export default function AdminPage({ params }) {
         updatedData.imageUrl = await uploadImageToSupabase(form.image);
       }
 
+       if (form.logo) {
+        updatedData.logoUrl = await uploadImageToSupabase(form.logo);
+      }
+
       await set(formRef, updatedData);
 
       console.log(`Form ${formId} updated successfully!`);
       alert(`Form ${formId} updated successfully!`);
 
-      setForm({ title: '', subtitle: '', image: null, imageUrl: '' });
+      setForm({ title: '', subtitle: '', image: null, imageUrl: '', logo: null, logoUrl: '' });
     } catch (error) {
       console.error('Error updating form:', error);
       alert('Failed to update form. Please try again.');
@@ -88,7 +99,7 @@ export default function AdminPage({ params }) {
   return (
     <div className="h-fit bg-[#121212] text-white p-8">
       <h1 className="text-3xl font-bold mb-8 sm:text-center">Admin Dashboard</h1>
-      <div className="space-y-8 w-full sm:flex sm:flex-col sm:items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
     <form
           onSubmit={(e) => handleSubmit(e, form1, setForm1, 'form1')}
           className="bg-[#81818117] backdrop-blur-lg p-6 rounded-lg shadow-lg max-w-[500px]"
@@ -109,11 +120,23 @@ export default function AdminPage({ params }) {
               onChange={(e) => setForm1({ ...form1, subtitle: e.target.value })}
               className="w-full p-2 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <div>
+               <span>Company logo: {form1?.logoUrl?? '' }</span>
             <input
+              type="file"
+              onChange={(e) => handleLogoChange(e, form1, setForm1)}
+              className="w-full p-2 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              
+            />
+            </div>
+            <div>
+               <span>Site Logo: {form1?.imageUrl?? '' }</span>
+              <input
               type="file"
               onChange={(e) => handleImageChange(e, form1, setForm1)}
               className="w-full p-2 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            </div>
            <button
               type="submit"
               disabled={loading}
